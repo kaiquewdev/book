@@ -80,6 +80,7 @@ class Book(object):
 	Read all members registered in book.
 	'''
 	def read(self):
+		import pdb; pdb.set_trace()
 		if self.book:
 			if not self.book == {}:
 				for i in self.book:
@@ -126,8 +127,8 @@ Init all methods for execute program.
 '''
 if __name__ == '__main__':
 	init = Book()
-	init.create_file(init.filename)
-	init.set_file(init.filename, init.data_model)
+	if init.create_file(init.filename):
+		init.set_file(init.filename, init.data_model)
 	init.set_book(init.filename)
 	# Arguments of system.
 	args = sys.argv
@@ -144,10 +145,7 @@ if __name__ == '__main__':
 
 		if args[1] == '--read': 
 			#Read book address
-			if init.read():
-				print 'Done!'
-			else:
-				print 'Nothing for read, now!'
+			init.read()
 
 
 

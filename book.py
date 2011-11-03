@@ -82,17 +82,38 @@ class Book(object):
 	def read(self):
 		if self.book:
 			if not self.book == {}:
-				for i in self.book:
-					if i == 'name':
-						for j in self.book[str(i)]:
-							print 'Name: {0}'.format(j)
-					elif i == 'email':
-						for j in self.book[str(i)]:
-							print 'Email: {0}'.format(j)
-					elif i == 'phone':
-						for j in self.book[str(i)]:
-							print 'Phone: {0}'.format(j)
-	
+				name = self.book['name']
+				email = self.book['email']
+				phone = self.book['phone']
+				c = 0
+				
+				print '| Name | Email | Phone |'
+				print '-'*30
+				print ''
+				while True:
+					# Print member
+					print '[ {0}, {1}, {2} ]'.format(name[c], email[c], phone[c])
+					c += 1
+					if c == len(name) and c == len(email) and c == len(phone):
+						break
+	'''
+	Find a item in you book of contact.
+	'''
+	def find(self, keyword=None):
+		if keyword:
+			if self.book:
+				if not self.book == {}:
+					name = self.book['name']
+					email = self.book['email']
+					phone = self.book['phone']
+					c = 0
+					itens = []
+					
+					while True:
+						if (keyword in name[c]) or (keyword in email[c]) or (keyword in phone[c]):
+							print '[ {0}, {1}, {2} ]'.format(name[c], email[c], phone[c])
+							#return True
+						c += 1		
 	'''
 	Refresh the file with content of book
 	'''
@@ -109,15 +130,20 @@ class Book(object):
 	'''
 	def insertion(self, filename='', addrs={}):
 		addrs = addrs.split(',')
+		name = self.book['name']
+		email = self.book['email']
+		phone = self.book['phone']
+		
 		addrs[1] = addrs[1].strip()
 		addrs[2] = addrs[2].strip()
 
 		if filename and addrs:
 			if addrs[0].isalpha() and self.isemail(addrs[1]) and self.isphone(addrs[2]):
 				if type(self.book) == dict:
-					self.book['name'].append(addrs[0])
-					self.book['email'].append(addrs[1])
-					self.book['phone'].append(addrs[2])
+					name.append(addrs[0])
+					email.append(addrs[1])
+					phone.append(addrs[2])
+					
 					if self.save_in_file(self.filename, self.book):
 						return True
 
@@ -134,19 +160,30 @@ if __name__ == '__main__':
 	# Arguments of system.
 	args = sys.argv
 	
-	if args[1]:
-		if args[1] == '--insert':
-			if args[2]:
-				if init.insertion(init.filename, args[2]):
-					print 'Insertion is Done!'
-				else:
-					print 'Error in insertion!'
-			else:	
-				print 'Oops, error for insertion!'
+	if len(args) > 1:
+		if args[1]:
+			if args[1] == '--insert':
+				if len(args) < 3:	
+					print 'Oops, error for insertion!'
+				elif args[2]:
+					if init.insertion(init.filename, args[2]):
+						print 'Insertion is Done!'
+					else:
+						print 'Error in insertion!'
 
-		if args[1] == '--read': 
-			#Read book address
-			init.read()
+			if args[1] == '--read': 
+				#Read book address
+				print '-'*30
+				print 'Your book of contacts:'
+				print '-'*30
+				init.read()
+			if args[1] == '--find':
+				if len(args) < 3:
+					print 'Try input the keyword!'
+				elif args[2]:
+					print 'Searched by: {0}'.format(args[2])
+					print '-'*30
+					init.find(args[2])
 
 
 
